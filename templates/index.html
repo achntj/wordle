@@ -1,0 +1,18 @@
+{% extends "layout.html" %} {% block content %}
+<p>Hello world!</p>
+<p>
+  <form autocomplete="off" action="{{ url_for('game')}}" method="post">
+      <input
+        required
+        type="text"
+        name="word"
+        class="search-bar"
+        placeholder="Enter a 5 letter word:"
+      />
+      <button type="submit" class="button">Predict</button>
+    </form>
+  </div>
+  <b>Result: </b>{{result}}
+  <br />
+</p>
+{% endblock content %}
