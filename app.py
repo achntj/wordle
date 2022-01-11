@@ -27,11 +27,13 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return render_template('index.html', result='opening', data=[])
+    open('user-words.txt', 'w').close()   
+    return render_template('index.html', data=[])
 
 @app.route('/game', methods=['POST', 'GET'])
 def game():
-    result = []
+    again = False
+    result = {}
     last_word.clear()
     print(f'Clearing last word {last_word}')
     user_word = request.form.get("word").lower()
@@ -41,28 +43,28 @@ def game():
             global chances
             chances -= 1
             if user_word == word:
-                result.append("You got that right!")
-                restart()
+                result["You got that right!"] = "green"
+                again = True
             else:
                 for i in range(len(user_word)):
                     if user_word[i] in word:
                         corr_letter = user_word[i]
                         corr_index = word.find(corr_letter)
                         if i == corr_index:
-                            result.append(f"{user_word[i]} is at the correct position")
+                            # result.append(f"{user_word[i]} is at the correct position")
                             last_word[i] = [user_word[i], "green"]
                         else:
-                            result.append(f"{user_word[i]} is not at the correct position")
+                            # result.append(f"{user_word[i]} is not at the correct position")
                             last_word[i] = [user_word[i], "goldenrod"]
                     else:
-                        result.append(f"{user_word[i]} is not in the word")
+                        # result.append(f"{user_word[i]} is not in the word")
                         last_word[i] = [user_word[i], "red"]
                         
         else:
-            result.append("Invalid word")
+            result["Invalid word"] = "red"
 
     else:
-        result.append("Only 5 letters words are allowed!")
+        result["Only 5 letter words are allowed!"] = "red"
 
     with open('user-words.txt', 'a') as f1:
         if last_word:
@@ -77,9 +79,9 @@ def game():
     print(data)
     print(chances)
     if data:
-        return render_template('index.html', result=result, data=data)
+        return render_template('index.html', result=result, data=data, again=again)
     else:    
-        return render_template('index.html', result=result)
+        return render_template('index.html', result=result, again=again)
 
 @app.errorhandler(404)
 def page_not_found(e):

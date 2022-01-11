@@ -1,29 +1,32 @@
 {% extends "layout.html" %} {% block content %}
-<p>Hello world!</p>
-<p>
+<h1>Wordle Clone</h1>
+<div>
   <form autocomplete="off" action="{{ url_for('game')}}" method="post">
-      <input
-        required
-        type="text"
-        name="word"
-        class="search-bar"
-        placeholder="Enter a 5 letter word:"
-      />
-      <button type="submit" class="button">Predict</button>
-    </form>
-  </div>
-  <b>Result: </b>{{result}}
+    <input
+      required
+      type="text"
+      name="word"
+      class="search-bar"
+      placeholder="Enter a 5 letter word:"
+    />
+    <button type="submit" class="button">Check!</button>
+  </form>
   <br />
-  <div class="row">
+  {%if result%} {%for text, color in result.items()%}
+  <b style="color:{{color}}">Results: </b>{{text}} {%endfor%} {% endif %}
+  <div>{%if again%}<a href="/">Play Again!</a>{%endif%}</div>
+  <br />
+  <br />
+  <div class="box">
     {%for last_word in data%}
-    <div style="margin: 20px;">
+    <div class="row">
       {%for _, detail in last_word.items()%}
-        <span class= "block" style="background-color: {{detail[1]}};">
-          {{detail[0]}} 
-        </span>
-      {%endfor%}
+      <div class="block" style="background-color: {{detail[1]}};">
+        {{detail[0]}}
       </div>
+      {%endfor%}
+    </div>
     {%endfor%}
   </div>
-</p>
+</div>
 {% endblock content %}

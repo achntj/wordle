@@ -1,13 +1,41 @@
-.row {
+body {
+  max-width: 700px;
+  margin: 0 auto;
+  background-color: #181a1b;
+  color: #eee;
+}
+
+.box {
   background-color: black;
-  padding: 40px;
+  padding: 20px;
+}
+
+@media screen and (min-width: 700px) {
+  .row > * {
+    margin: 0 30px;
+  }
+}
+
+.row {
+  display: flex;
   font-size: 40px;
   text-align: center;
+  margin-bottom: 20px;
 }
 
 .block {
-  background-color: #eee;
   padding: 5px;
-  color: white;
+  color: #eee;
   margin-right: 5px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  line-height: 2rem;
+  font-weight: bold;
+  vertical-align: middle;
+  box-sizing: border-box;
+  text-transform: uppercase;
+  user-select: none;
+  border-radius: 2px;
 }
