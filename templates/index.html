@@ -14,14 +14,15 @@
   </div>
   <b>Result: </b>{{result}}
   <br />
-  <div style="background-color: black">
+  <div class="row">
     {%for last_word in data%}
+    <div style="margin: 20px;">
       {%for _, detail in last_word.items()%}
-        <span style="color: {{detail[1]}}">
+        <span class= "block" style="background-color: {{detail[1]}};">
           {{detail[0]}} 
         </span>
       {%endfor%}
-      <br>
+      </div>
     {%endfor%}
   </div>
 </p>
