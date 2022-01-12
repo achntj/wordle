@@ -27,7 +27,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    open('user-words.txt', 'w').close()   
+    restart()
     return render_template('index.html', data=[])
 
 @app.route('/game', methods=['POST', 'GET'])
@@ -76,12 +76,16 @@ def game():
     for line in string:
         data.append(ast.literal_eval(line))
 
-    print(data)
     print(chances)
-    if data:
-        return render_template('index.html', result=result, data=data, again=again)
-    else:    
-        return render_template('index.html', result=result, again=again)
+    if chances >= 0:
+        if data:
+            return render_template('index.html', result=result, data=data, again=again)
+        else:    
+            return render_template('index.html', result=result, again=again)
+    else:
+        again = True
+        print(result)
+        return render_template('index.html', result={f"You lost! The word was {word}.": "red"}, data=data, again=again) 
 
 @app.errorhandler(404)
 def page_not_found(e):
