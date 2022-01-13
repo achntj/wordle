@@ -13,8 +13,11 @@ chances = 5
 
 def restart():
     global word
-    word = "bingo"
-    # print(word)
+    word = random.choice(word_list)
+    global chances
+    chances = 5
+    open('user-words.txt', 'w').close()
+    print(word)
 
 # Flask Stuff & Game Logic
 
@@ -23,14 +26,10 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     restart()
-    global chances
-    chances = 5
-    open('user-words.txt', 'w').close()
     return render_template('index.html', data=[])
 
 @app.route('/game', methods=['POST', 'GET'])
 def game():
-    restart()
     again = False
     result = {}
     last_word.clear()
