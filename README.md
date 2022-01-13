@@ -6,9 +6,9 @@ This is an implementation of the Wordle Game in python FLASK
     pip3 install virtualenv
     virtualenv wordle-clone
     source wordle-clone/bin/activate
-    pip3 install -r requirements.txt
     git clone https://github.com/achintyajha/wordle.git wordle-python
     cd wordle-python
+    pip3 install -r requirements.txt
     export FLASK_APP="app.py"
     flask run
 ```
