@@ -1,6 +1,22 @@
 {% extends "layout.html" %} {% block content %}
 <h1>Wordle Clone</h1>
+<p>
+  Hi! This is a wordle clone written in Python. To play this game, type a 5
+  letter word in the box below and press 'Enter' / 'Return'. If you guess a
+  letter right and it's at the right position, it'll turn green. If it's in the
+  word but not at the right position, it'll turn yellow. Finally, if it's not in
+  the word at all, it'll turn red. You have 6 chances and these 'colour-hints'
+  to guess the right word. Currently, the game updates with a new word everyday.
+  Enjoy!
+</p>
+<p>
+  <b>Note: </b>This project was inspired by the original game-
+  <a href="https://www.powerlanguage.co.uk/wordle/">'Wordle'</a>, which is much
+  better than this spin-off. Please have a look at that as well!
+</p>
+<p>Made by <a href="https://achintyajha.in">Achintya.</a></p>
 <div>
+  {%if not again%}
   <form autocomplete="off" action="{{ url_for('game')}}" method="post">
     <input
       required
@@ -11,6 +27,7 @@
     />
     <button type="submit" class="button">Check!</button>
   </form>
+  {%endif%}
   <br />
   {%if result%} {%for text, color in result.items()%}
   <b style="color:{{color}}">Results: </b>{{text}} {%endfor%} {% endif %}

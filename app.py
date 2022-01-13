@@ -9,17 +9,12 @@ with open('word-list.txt', 'r') as f:
 
 last_word = dict()
 
-word = random.choice(word_list)
 chances = 5
-print(word)
 
 def restart():
     global word
-    word = random.choice(word_list)
-    global chances
-    chances = 5
-    print(word)
-    open('user-words.txt', 'w').close()
+    word = "bingo"
+    # print(word)
 
 # Flask Stuff & Game Logic
 
@@ -28,43 +23,57 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     restart()
+    global chances
+    chances = 5
+    open('user-words.txt', 'w').close()
     return render_template('index.html', data=[])
 
 @app.route('/game', methods=['POST', 'GET'])
 def game():
+    restart()
     again = False
     result = {}
     last_word.clear()
     print(f'Clearing last word {last_word}')
-    user_word = request.form.get("word").lower()
-    
-    if len(user_word) == 5:
-        if user_word in word_list:
-            global chances
-            chances -= 1
-            if user_word == word:
-                result["You got that right!"] = "green"
-                again = True
-            else:
-                for i in range(len(user_word)):
-                    if user_word[i] in word:
-                        corr_letter = user_word[i]
-                        corr_index = word.find(corr_letter)
-                        if i == corr_index:
-                            # result.append(f"{user_word[i]} is at the correct position")
-                            last_word[i] = [user_word[i], "green"]
-                        else:
-                            # result.append(f"{user_word[i]} is not at the correct position")
-                            last_word[i] = [user_word[i], "goldenrod"]
-                    else:
-                        # result.append(f"{user_word[i]} is not in the word")
-                        last_word[i] = [user_word[i], "red"]
-                        
-        else:
-            result["Invalid word"] = "red"
+    global chances
+    if chances > 0:
+        user_word = request.form.get("word").lower()
+        if len(user_word) == 5:
+            if user_word in word_list:
+                chances -= 1
 
-    else:
-        result["Only 5 letter words are allowed!"] = "red"
+                if user_word == word:
+                    result["You got that right!"] = "green"
+                    for i in range(len(user_word)):
+                        last_word[i] = [user_word[i], "green"]
+                    again = True
+                else:
+                    for i in range(len(user_word)):
+                        if chances == 0:
+                            again = True
+                            result[f"You lost! The word was '{word}'."] = "red"
+                        if user_word[i] in word:
+                            corr_letter = user_word[i]
+                            corr_index = [i for i, ltr in enumerate(word) if ltr == corr_letter]
+                            if i in corr_index:
+                                # result.append(f"{user_word[i]} is at the correct position")
+                                last_word[i] = [user_word[i], "green"]
+                            else:
+                                # result.append(f"{user_word[i]} is not at the correct position")
+                                last_word[i] = [user_word[i], "goldenrod"]
+                        else:
+                            # result.append(f"{user_word[i]} is not in the word")
+                            last_word[i] = [user_word[i], "red"]
+
+            else:
+                result["Invalid word"] = "red"
+
+        else:
+            result["Only 5 letter words are allowed!"] = "red"
+
+    # else:
+    #     again = True
+    #     result[f"You lost! The word was '{word}'."] = "red"
 
     with open('user-words.txt', 'a') as f1:
         if last_word:
@@ -77,15 +86,10 @@ def game():
         data.append(ast.literal_eval(line))
 
     print(chances)
-    if chances >= 0:
-        if data:
-            return render_template('index.html', result=result, data=data, again=again)
-        else:    
-            return render_template('index.html', result=result, again=again)
-    else:
-        again = True
-        print(result)
-        return render_template('index.html', result={f"You lost! The word was {word}.": "red"}, data=data, again=again) 
+    if data:
+        return render_template('index.html', result=result, data=data, again=again)
+    else:    
+        return render_template('index.html', result=result, again=again)
 
 @app.errorhandler(404)
 def page_not_found(e):

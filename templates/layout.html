@@ -11,6 +11,11 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='style.css') }}"
     />
+    <title>Wordle Clone</title>
+    <link
+      rel="shortcut icon"
+      href="{{ url_for('static', filename='avatar.png') }}"
+    />
   </head>
   <body>
     <div class="container">{% block content %} {% endblock %}</div>
